@@ -1,0 +1,1 @@
+# Rekvalifikace-django-eshop
