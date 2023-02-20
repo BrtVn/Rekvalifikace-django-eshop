@@ -1,0 +1,11 @@
+# ignore ALL .log files
+*.log
+*.pyc 
+*.zip
+
+# ignore ALL files in ANY directory named temp
+temp/
+startbootstrap-shop-item-gh-pages/
+startbootstrap-shop-homepage-gh-pages/
+startbootstrap-blog-post-gh-pages/
+startbootstrap-blog-home-gh-pages/

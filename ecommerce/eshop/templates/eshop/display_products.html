@@ -1,0 +1,55 @@
+
+{% if products%}
+{% for product in products %}
+<div class="col mb-5">
+    <div class="card h-100 shadow p-3">
+        <!-- Sale badge-->
+        {% if product.tagy.all.0 %}
+        {% for tag in product.tagy.all %}
+        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">{{product.product_tag}}</div>
+        {% endfor %}
+        {% endif %}
+        <!-- Product image-->
+        <a class="btn" href="{% url "product_detail" product.id %}">
+            <img class="card-img-top" src={{product.product_image.url}} alt="..." />
+        </a>
+        <!-- Product details-->
+        <div class="card-body p-4">
+            <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder">{{product.product_name}}</h5>
+                <!-- Product reviews-->
+                {% if product.product_evaluation >  0 %}
+                <div class="d-flex justify-content-center small text-warning mb-2">
+                    <span class="fw-bolder">{{product.product_evaluation}}/5</span> <div class="bi-star-fill"></div>
+                </div>
+                {% endif %}
+                <!-- Product price-->
+                {% if product.original_price >  product.product_price%}
+                <span class="text-muted text-decoration-line-through">${{product.original_price}}</span>
+                {% endif %}
+                ${{product.product_price}}
+                
+                <div class="row">
+                    <div class="text-wrap">
+                        <p>                         
+                            {{product.product_description | truncatechars:100 }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product actions-->
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+                <a class="btn btn-outline-dark mt-auto" href="{% url "product_detail" product.id %}">
+                More details
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<h5>No products yet</h5>
+{% endif %}

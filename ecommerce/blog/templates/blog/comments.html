@@ -1,0 +1,30 @@
+{% load django_bootstrap5 %}
+{% block comments %}   
+<section class="mb-5">
+    <div class="card bg-light">
+        <div class="card-body">
+            <h3>Add comment</h3>
+            <!-- Comment form-->
+            <form class="mb-4 form" action="{{url_action}}" method="post">
+                {% csrf_token %}  
+                {% bootstrap_form form %}
+                
+                <button type="submit" class="btn btn-outline-dark">Submit comment</button>
+            </form>
+            <!-- Single comment-->
+            {% for comment in comments %}
+            <div class="d-flex">
+                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                <div class="ms-3">
+                    <div class="fw-bold"> {{ comment.name }}</div>
+                    <span class=" text-muted font-weight-normal">
+                        {{ comment.created_on }}
+                    </span>
+                    {{ comment.body | linebreaks }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
