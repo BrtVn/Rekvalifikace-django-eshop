@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect, reverse
 from django.views import generic
-from eshop.forms.user_form import UserForm, LoginUserForm
-from eshop.models.users import Customer
+from eshop.forms.user_form import CreateUserForm, LoginUserForm
+from eshop.models.users import CustomUser
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 class UserViewRegister(generic.edit.CreateView):
-    form_class = UserForm
-    model = Customer
+    form_class = CreateUserForm
+    model = CustomUser
     template_name = "eshop/base_form.html"
+
     def get(self, request):
         if request.user.is_authenticated:
             messages.info(request, "Already logged in, you can't register")
@@ -21,12 +24,11 @@ class UserViewRegister(generic.edit.CreateView):
                        "url_action": url_action}
         return render(request, self.template_name, context)
 
-
     def post(self, request):
         if request.user.is_authenticated:
             messages.info(request, "Already logged in, you can't register")
-            return redirect(reverse("index"))  
-        
+            return redirect(reverse("index"))
+
         form = self.form_class(request.POST)
         if (form.is_valid()):
             uzivatel = form.save(commit=False)
@@ -43,8 +45,9 @@ class UserViewRegister(generic.edit.CreateView):
 
 class UserViewLogin(generic.edit.CreateView):
     form_class = LoginUserForm
-    model = Customer
+    model = CustomUser
     template_name = "eshop/base_form.html"
+    # success_message = "Successfully logged in"
 
     def get(self, request):
         if request.user.is_authenticated:
@@ -77,7 +80,8 @@ class UserViewLogin(generic.edit.CreateView):
 
         messages.error(request, 'Error, check your credentials')
         return render(request, self.template_name, {"form": form})
-    
+
+
 def logout_user(request):
     if request.user.is_authenticated:
         messages.info(request, 'Successfully logged out')

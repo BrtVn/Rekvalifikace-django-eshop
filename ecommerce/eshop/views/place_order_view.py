@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from eshop.models.users import Customer
+from eshop.models.users import DeliveryInformation
 from eshop.models.orders import Order
 from eshop.forms.order_form import OrderForm
 
@@ -12,11 +12,11 @@ class PlaceOrderView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        customer = Customer.objects.get(id=self.kwargs['i'])
+        customer = DeliveryInformation.objects.get(id=self.kwargs['i'])
         context['customer'] = customer
         return context
 
     def form_valid(self, form):
-        customer = Customer.objects.get(id=self.kwargs['i'])
+        customer = DeliveryInformation.objects.get(id=self.kwargs['i'])
         form.instance.customer = customer
         return super().form_valid(form)

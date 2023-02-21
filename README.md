@@ -14,3 +14,7 @@ https://stackoverflow.com/questions/48488642/how-can-i-delete-database-table-in-
 
 
 https://djangocentral.com/building-a-blog-application-with-django/
+
+
+
+django allauth

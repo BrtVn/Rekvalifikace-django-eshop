@@ -10,7 +10,7 @@ STATUS = (
 
 class Order(models.Model):
     product = models.ManyToManyField("Product")
-    customer = models.ForeignKey("Customer", on_delete=models.CASCADE)
+    customer = models.ForeignKey("CustomUser", on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField(default=0)
     address = models.CharField (max_length=50, default='', blank=True)

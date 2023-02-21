@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, reverse
 from django.views import generic
 from eshop.forms.profile_form import ProfileForm
 from django.contrib import messages
-from eshop.models.users import Customer, User
+from eshop.models.users import CustomUser
 
 class ProfileFormView(generic.edit.UpdateView):
     form_class = ProfileForm
-    model = User
+    model = CustomUser
     template_name = "eshop/base_form.html"
     template_name_suffix = '_update_profile_form'
     
