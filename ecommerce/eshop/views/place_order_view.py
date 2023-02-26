@@ -1,6 +1,6 @@
-from django.views.generic.edit import CreateView
+"""from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from eshop.models.users import DeliveryInformation
+#from eshop.models.users import DeliveryInformation
 from eshop.models.orders import Order
 from eshop.forms.order_form import OrderForm
 
@@ -19,4 +19,4 @@ class PlaceOrderView(CreateView):
     def form_valid(self, form):
         customer = DeliveryInformation.objects.get(id=self.kwargs['i'])
         form.instance.customer = customer
-        return super().form_valid(form)
+        return super().form_valid(form)"""

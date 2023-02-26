@@ -1,0 +1,117 @@
+{% extends "account/base.html" %}
+{% load django_bootstrap5%}
+{% load i18n %}
+
+{% block head_title %}{% trans "E-mail Addresses" %}{% endblock %}
+
+{% block form %}
+<h5>{% trans "E-mail Addresses" %}</h5>
+{% if user.emailaddress_set.all %}
+<p class="card-text">{% trans 'The following e-mail addresses are associated with your account:' %}</p>
+
+<form action="{% url 'account_email' %}" class="email_list" method="post">
+    {% csrf_token %}  
+<fieldset class="blockLabels">
+    <div class="row">
+  {% for emailaddress in user.emailaddress_set.all %}
+
+<div class="col-12 mt-2 align-content-center">
+    
+    <div class="form-check">
+        <input class="form-check-input"  type="radio" name="flexRadioDefault" checked="checked" id="email_radio_{{forloop.counter}}">
+        <label class="form-check-label fs-5 {% if emailaddress.primary %} fw-bold {%endif%}" for="email_radio_{{forloop.counter}}">
+            {{ emailaddress.email }}
+        </label>
+    </div>
+   <div class="row">
+        <div class="col-12 align-content-center">
+            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                {% if emailaddress.primary %}
+                <span class="btn btn-outline-success text-center text-lowercase fw-bold disabled" type="submit">{% trans "Primary" %}</span>
+
+            {% else %}
+
+            {% endif %}
+            {% if emailaddress.verified %}
+
+                <span class="btn text-center text-lowercase fw-bold disabled" type="submit">{% trans "Verified" %}</span>
+
+            {% else %}
+
+                <span class="btn btn-outline-danger text-center text-lowercase fw-bold disabled" type="submit">{% trans "Unverified" %}</span>
+
+            {% endif %}
+            
+            </div>
+        </div>
+    </div>  
+    
+</div>
+
+  {% endfor %}
+</div>
+<div class="d-grid mt-4">
+    <button class="btn btn-outline-dark text-center text-uppercase fw-bold" name="action_primary" type="submit">{% trans 'Make Primary' %}</button>
+</div>
+
+<div class="d-grid mt-2">
+<button class="btn btn-outline-dark text-center text-uppercase fw-bold" name="action_send" type="submit">{% trans 'Re-send Verification' %}</button>
+</div>
+
+<div class="d-grid mt-2">
+    <button class="btn btn-outline-dark text-center text-uppercase fw-bold" name="action_remove" type="submit">{% trans 'Remove' %}</button>
+</div>
+
+
+
+</fieldset>
+</form>
+
+{% else %}
+<p><strong>{% trans 'Warning:'%}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+
+{% endif %}
+
+<hr class="my-4">
+  {% if can_add_email %}
+    <h5 >{% trans "Add E-mail Address" %}</h5>
+
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+        {% csrf_token %}
+        
+        {% bootstrap_form form %} 
+        <div class="d-grid mt-2">
+            <button class="btn btn-outline-dark text-center text-uppercase fw-bold" name="action_primary" type="submit">{% trans "Add E-mail" %}</button>
+        </div>
+    </form>
+  {% endif %}
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script type="text/javascript">
+(function() {
+    console.log("jsem ve funkci")
+    var message = "{% trans 'Do you really want to remove the selected e-mail address?' %}";
+    var actions = document.getElementsByName('action_remove');
+    console.log(actions)
+    if (actions.length) {
+        console.log("jsem v ifu 1");
+        actions[0].addEventListener("click", function(e) {
+
+        if (! confirm(message)) {
+            e.preventDefault();
+            console.log("jsem v ifu 2");
+        }
+
+        });
+    }
+})();
+</script>
+{% endblock %}
+
+
+<!--
+    
+-->

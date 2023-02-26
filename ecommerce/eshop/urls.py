@@ -12,11 +12,13 @@ urlpatterns = [
          views.CurrentProductView.as_view(), name="product_detail"),
     path('contact/',
          views.ContactFormView.as_view(), name="contact_form"),
-    path("register/", views.UserViewRegister.as_view(), name="register"),
-    path("login/", views.UserViewLogin.as_view(), name="login"),
-    path("logout/", views.logout_user, name="logout"),
-    path("profile/", views.ProfileFormView.as_view(), name="profile"),
-    # path('place-order/<int:i>/', views.PlaceOrderView.as_view(), name='place_order'),
-    # path('product-detail/<int:pk>/add-item/', views.add_to_cart, name='place_order'),
     path('cart/', views.CartView.as_view(), name='cart'),
+
+
+    # admin
+    path('products/', views.ProductListView.as_view(), name='list_products'),
+    path('create/', views.ProductCreateView.as_view(), name='create_product'),
+    path('update/<int:pk>/', views.ProductUpdateView.as_view(), name='update_product'),
+   # path('delete-image/<int:pk>/', views.delete_image, name='delete_image'),
+   # path('delete-variant/<int:pk>/', views.delete_variant, name='delete_variant'),
 ]

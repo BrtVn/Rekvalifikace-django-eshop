@@ -58,13 +58,18 @@
                                     Account
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    {% if request.user.email %}
-                                    <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                                    {% if request.user.is_authenticated %}
+                                    {% if request.user.is_superuser %}
+                                    <li><a class="dropdown-item" href="{% url 'list_products' %}">Administrace</a></li>
+                                    {% endif %}
+                                    {% if request.user.is_customer %}
+                                    <li><a class="dropdown-item" href="{% url 'profile_detail' %}">Profile</a></li>
                                     <li><a class="dropdown-item" href="#!">Orders</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                    {% endif %}
+                                    <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
                                     {% else %}
-                                    <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'account_login' %}">Login</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'account_signup' %}">Register</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
@@ -226,6 +231,10 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <!--<script src="js/scripts.js"></script>-->
+
+            {% block extra_body %}
+            
+            {% endblock %}  
+
     </body>
 </html>

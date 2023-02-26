@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+"""from django.shortcuts import render, redirect, reverse
 from django.views import generic
 from eshop.forms.profile_form import ProfileForm
 from django.contrib import messages
@@ -51,5 +51,4 @@ class ProfileFormView(generic.edit.UpdateView):
         messages.error(request, 'Error')
         return render(request, self.template_name, {"form": form})
 
-"""
 """

@@ -17,4 +17,7 @@ https://djangocentral.com/building-a-blog-application-with-django/
 
 
 
-django allauth
+django allauth:
+https://dev.to/gajesh/the-complete-django-allauth-guide-la3
+https://pyphilly.org/know-thy-user-custom-user-models-django-allauth/
+https://testdriven.io/blog/django-custom-user-model/

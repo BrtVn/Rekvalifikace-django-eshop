@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from eshop.models.products import Product
-from eshop.views.place_order_view import PlaceOrderView
 
 class CurrentProductView(generic.DetailView):
 

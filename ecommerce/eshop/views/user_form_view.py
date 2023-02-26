@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+"""from django.shortcuts import render, redirect, reverse
 from django.views import generic
 from eshop.forms.user_form import CreateUserForm, LoginUserForm
 from eshop.models.users import CustomUser
@@ -89,3 +89,4 @@ def logout_user(request):
     else:
         messages.info(request, "You cannot log out if you are not logged in")
     return redirect(reverse("index"))
+"""

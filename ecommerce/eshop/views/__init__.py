@@ -7,3 +7,4 @@ from .user_form_view import *
 from .profile_form_view import *
 from .place_order_view import *
 from .cart_view import *
+from .products_admin_views import *

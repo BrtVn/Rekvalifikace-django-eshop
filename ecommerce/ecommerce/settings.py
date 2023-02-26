@@ -32,10 +32,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.messages',
     'blog',
-    'django_bootstrap5',
     'eshop',
+    'users',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'django_bootstrap5',
+    'django.contrib.sites',  # allauth
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -130,5 +136,53 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "eshop.CustomUser"
-LOGIN_REDIRECT_URL = 'index'
+AUTH_USER_MODEL = "users.CustomUser"
+
+LOGIN_REDIRECT_URL = 'accounts/profile'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'index'
+
+# AllAuth:
+# ---------------------------------------------------------------------------
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
+# Settings for email as username
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+# Email confirmation https://codeburst.io/master-the-user-authentication-in-django-allauth-f1a4368bb460
+# ACCOUNT_EMAIL_SUBJECT_PREFIX = "[My Website]"
+# ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+# https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
+# EMAIL_TIMEOUT = 5
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = 'youremail@gmail.com'
+# EMAIL_HOST_PASSWORD = 'email_password'
+# EMAIL_SUBJECT_PREFIX = 'AllAuth Tutorial'
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# EMAIL_BACKEND = env(
+#    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+# )
+
+# After 10 failed login attempts, restrict logins for 30 minutes
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 10
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 1800
+ACCOUNT_PASSWORD_MIN_LENGTH = 12
+
+# Other settings
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
