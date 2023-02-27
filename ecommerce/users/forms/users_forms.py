@@ -7,7 +7,6 @@ from users.models import CustomUser, DeliveryInformation
 
 
 class CustomUserCreationForm(UserCreationForm):
-
     class Meta:
         model = CustomUser
         fields = ["first_name", "last_name"]
@@ -25,16 +24,23 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = CustomUser
-        fields = ["first_name", "last_name", "phone", "email", ]
-        
+        fields = [
+            "first_name",
+            "last_name",
+            "phone",
+            "email",
+        ]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         password = self.fields.get("password")
         if password:
             password.help_text = password.help_text.format("/accounts/password/set/")
-            
+
+
 class DeliveryInformationForm(ModelForm):
-    
     class Meta:
         model = DeliveryInformation
-        exclude = ['user',]
+        exclude = [
+            "user",
+        ]

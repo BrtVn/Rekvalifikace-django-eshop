@@ -1,13 +1,10 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
-from django.forms import inlineformset_factory
 from django.db import transaction
-from eshop.models.products import Product, ProductImage, ProductVariant
+from eshop.models.products import Product
 from eshop.forms.products_forms import (
     ProductForm,
-    VariantForm,
-    ImageForm,
     ProductVariantFormSet,
     ProductImageFormSet,
 )
