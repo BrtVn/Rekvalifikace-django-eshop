@@ -4,31 +4,79 @@ from django.views.generic import ListView
 from django.forms import inlineformset_factory
 from django.db import transaction
 from eshop.models.products import Product, ProductImage, ProductVariant
-from eshop.forms.products_forms import ProductForm, ProductVariantFormSet, ProductImageFormSet
+from eshop.forms.products_forms import (
+    ProductForm,
+    VariantForm,
+    ImageForm,
+    ProductVariantFormSet,
+    ProductImageFormSet,
+)
 
 
-class ProductInline:
+# class ProductInline:
+#     model = Product
+#     form_class = ProductForm
+#     success_url = reverse_lazy("list_products")
+#     template_name = "eshop/product_create_or_update.html"
+
+#     def get_context_data(self, **kwargs):
+#         data = super().get_context_data(**kwargs)
+#         if self.request.POST:
+#             data["images"] = ProductImageFormSet(
+#                 self.request.POST, self.request.FILES, instance=self.object
+#             )
+#             data["variants"] = ProductVariantFormSet(
+#                 self.request.POST, instance=self.object
+#             )
+#         else:
+#             data["images"] = ProductImageFormSet(instance=self.object)
+#             data["variants"] = ProductVariantFormSet(instance=self.object)
+#         return data
+
+#     def form_valid(self, form):
+#         context = self.get_context_data()
+#         images = context["images"]
+#         variants = context["variants"]
+#         with transaction.atomic():
+#             self.object = form.save()
+#             if images.is_valid() and variants.is_valid():
+#                 images.instance = self.object
+#                 images.save()
+#                 variants.instance = self.object
+#                 variants.save()
+#         return super().form_valid(form)
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = "eshop/product_list.html"
+    context_object_name = "products"
+
+
+class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
-    success_url = reverse_lazy('list_products')
-    template_name = 'eshop/product_create_or_update.html'
+    success_url = reverse_lazy("list_products")
+    template_name = "eshop/product_create_or_update.html"
 
     def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
+        data = super(ProductCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            data['images'] = ProductImageFormSet(
-                self.request.POST, self.request.FILES, instance=self.object)
-            data['variants'] = ProductVariantFormSet(
-                self.request.POST, instance=self.object)
+            data["images_formset"] = ProductImageFormSet(
+                self.request.POST, self.request.FILES, instance=self.object
+            )
+            data["variants_formset"] = ProductVariantFormSet(
+                self.request.POST, instance=self.object
+            )
         else:
-            data['images'] = ProductImageFormSet(instance=self.object)
-            data['variants'] = ProductVariantFormSet(instance=self.object)
+            data["images_formset"] = ProductImageFormSet(instance=self.object)
+            data["variants_formset"] = ProductVariantFormSet(instance=self.object)
         return data
 
     def form_valid(self, form):
         context = self.get_context_data()
-        images = context['images']
-        variants = context['variants']
+        images = context["images_formset"]
+        variants = context["variants_formset"]
         with transaction.atomic():
             self.object = form.save()
             if images.is_valid() and variants.is_valid():
@@ -36,26 +84,53 @@ class ProductInline:
                 images.save()
                 variants.instance = self.object
                 variants.save()
-        return super().form_valid(form)
+        return super(ProductCreateView, self).form_valid(form)
 
 
-class ProductCreateView(ProductInline, CreateView):
-    ProductVariantFormSet = inlineformset_factory(
-    Product, ProductVariant, form=VariantForm,
-    extra=1, can_delete=True, can_delete_extra=True
-)
-    ProductImageFormSet = inlineformset_factory(
-    Product, ProductImage, form=ImageForm,
-    extra=1, can_delete=True, can_delete_extra=True
-)
-class ProductUpdateView(ProductInline, UpdateView):
-    pass
+class ProductUpdateView(UpdateView):  # pylint: disable=too-many-ancestors
+    """
+    Úprava konkrétního produktu
 
+    Args:
+        UpdateView (_type_): _description_
 
-class ProductListView(ListView):
+    Returns:
+        _type_: _description_
+    """
+
     model = Product
-    template_name = "eshop/product_list.html"
-    context_object_name = "products"
+    form_class = ProductForm
+    success_url = reverse_lazy("list_products")
+    template_name = "eshop/product_create_or_update.html"
+
+    def get_context_data(self, **kwargs):
+        data = super(ProductUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data["images_formset"] = ProductImageFormSet(
+                self.request.POST, self.request.FILES, instance=self.object
+            )
+            data["variants_formset"] = ProductVariantFormSet(
+                self.request.POST, instance=self.object
+            )
+        else:
+            data["images_formset"] = ProductImageFormSet(instance=self.object)
+            data["variants_formset"] = ProductVariantFormSet(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        images = context["images_formset"]
+        variants = context["variants_formset"]
+        with transaction.atomic():
+            if images.is_valid() and variants.is_valid():
+                self.object = form.save()
+                images.instance = self.object
+                images.save()
+                variants.instance = self.object
+                variants.save()
+        return super(ProductUpdateView, self).form_valid(form)
+
+
 # https://www.letscodemore.com/blog/django-inline-formset-factory-with-examples/
 # from django.shortcuts import render, redirect
 # from django.contrib import messages
