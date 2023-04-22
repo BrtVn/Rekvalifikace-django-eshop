@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}
+    Blog Home - Start Bootstrap Template
+{% endblock title %}
+{% block header %}
+    Blog in style
+{% endblock header %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                {% block blog_content %}
+                {% endblock blog_content %}
+            </div>
+            <div class="col-12 col-lg-4">
+                {% block blog_sidebar %}
+                    {% include "blog/blog_sidebar.html" %}
+                {% endblock blog_sidebar %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

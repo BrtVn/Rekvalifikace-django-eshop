@@ -1,0 +1,36 @@
+{% extends "moderator/moderator_layout.html" %}
+{% block moderator_content %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Name</th>
+                <th scope="col"></th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for info in infos %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ info.company_name }}</td>
+                    <td></td>
+                    <td>
+                        <a class="btn btn-success"
+                           href="{% url 'update_company_info' info.id %}">Edit</a>
+                        {% comment %} <a class="btn btn-outline-danger" href="{% url 'delete_company_info' info.id %}">Delete</a> {% endcomment %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% if not infos %}
+            <tfoot>
+                <tr>
+                    <th colspan="4">
+                        <a href="{% url 'create_company_info' %}">Add company information</a>
+                    </th>
+                </tr>
+            </tfoot>
+        {% endif %}
+    </table>
+{% endblock moderator_content %}

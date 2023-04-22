@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-        {% extends "base.html" %}
-        {% block content %}
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <h2>{{ category.category_name }}</h2>
-                <p>{{ category.category_description }}</p>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    {% load display_products %}
-                    {% show_products category.category_name %}
-                </div>
+{% extends "base.html" %}
+{% block content %}
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <h2>{{ category.category_name }}</h2>
+            <p>{{ category.category_description | safe }}</p>
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {% load products_tags %}
+                {% show_products category.category_name %}
             </div>
-        </section>
-        {% endblock %}
-
-</body>
-</html>
+        </div>
+    </section>
+{% endblock content %}

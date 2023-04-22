@@ -1,0 +1,88 @@
+{% extends "moderator/moderator_layout.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block moderator_content %}
+  <div class="container mb-5">
+    <form class="form" method="post" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="p-3 py-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="text-right">Product:</h4>
+            </div>
+            {% csrf_token %}
+            {{ form.media }}
+            {% bootstrap_form form layout='horizontal' %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 border-right">
+            <div class="p-3 py-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-right">Variants:</h4>
+              </div>
+              <div class="d-grid gap-2">
+                {{ variants_formset.management_form }}
+                {% for form in variants_formset %}
+                  <button class="m-2 btn btn-outline-dark"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#variantForm-{{ forloop.counter }}"
+                          aria-expanded="false"
+                          aria-controls="variantForm-{{ forloop.counter }}">
+                    {% if form.variant.value %}
+                      Edit variant "{{ form.variant.value|default_if_none:"" }}"
+                    {% else %}
+                      New variant
+                    {% endif %}
+                  </button>
+                  <div class="collapse" id="variantForm-{{ forloop.counter }}">{% bootstrap_form form layout='horizontal' %}</div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 py-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-right">Images:</h4>
+              </div>
+              <div class="d-grid gap-2">
+                {{ images_formset.management_form }}
+                {% for form in images_formset %}
+                  <button class="m-2 btn btn-outline-dark"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#imageForm-{{ forloop.counter }}"
+                          aria-expanded="false"
+                          aria-controls="imageForm-{{ forloop.counter }}">
+                    {% if form.image.value %}
+                      Edit image {{ forloop.counter }}
+                    {% else %}
+                      New image
+                    {% endif %}
+                  </button>
+                  <div class="collapse" id="imageForm-{{ forloop.counter }}">{% bootstrap_form form layout='horizontal' %}</div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 text-center">
+          <button class="btn btn-secondary btn-dark btn-login" type="submit">Save Product</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock moderator_content %}
+{% block extra_body %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="{% static 'admin/js/vendor/xregexp/xregexp.min.js' %}"></script>
+  <script src="{% static 'admin/js/urlify.js' %}"></script>
+  <script>
+    slug = $('#id_slug');
+    title = $('#id_product_name');
+    title.keyup(function(){
+        slug.val(URLify(title.val(), 50, true));
+     });
+  </script>
+{% endblock extra_body %}

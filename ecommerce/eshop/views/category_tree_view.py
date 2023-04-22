@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 
-from eshop.models.product_category import ProductCategory
+from eshop.models.products import ProductCategory
 
 
 class CategoryTreeIndex(generic.ListView):
@@ -14,4 +14,3 @@ class CategoryTreeIndex(generic.ListView):
     def get_queryset(self):
         categories = ProductCategory.objects.all()
         return categories
-    

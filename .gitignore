@@ -12,6 +12,7 @@ startbootstrap-blog-home-gh-pages/
 startbootstrap-sb-admin-gh-pages/
 .vscode/
 vscode/
+media/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

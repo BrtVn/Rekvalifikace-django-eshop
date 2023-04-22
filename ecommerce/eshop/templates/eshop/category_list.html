@@ -1,34 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-        {% extends "base.html" %}
-        {% block content %}
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row justify-content-center">
-                    {% if categories %}
-                    {% for category in categories %}
-
+{% extends "base.html" %}
+{% block content %}
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row justify-content-center">
+                {% for category in categories %}
                     <div>
-                        <a class="btn" href={% url "category_detail" category.id %}>
-                            <h2>{{category.category_name}}</h2>
-                            <p>{{ category.category_description }}</p>
+                        <a class="btn mt-2" href="{% url 'category_detail' category.slug %}">
+                            <h2>{{ category.category_name }}</h2>
+                            <p>{{ category.category_description | safe }}</p>
                         </a>
                     </div>
-                    
-                    {% endfor %}
-                    {% else %}
+                {% empty %}
                     <h5>No categories yet</h5>
-                    {% endif %}
-                </div>
+                {% endfor %}
             </div>
-        </section>
-
-        {% endblock %}
-
-</body>
-</html>
-    
+        </div>
+    </section>
+{% endblock content %}

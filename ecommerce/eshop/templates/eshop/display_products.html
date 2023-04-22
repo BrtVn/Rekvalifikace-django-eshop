@@ -1,55 +1,119 @@
-
-{% if products%}
 {% for product in products %}
-<div class="col mb-5">
-    <div class="card h-100 shadow p-3">
-        <!-- Sale badge-->
-        {% if product.tagy.all.0 %}
-        {% for tag in product.tagy.all %}
-        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">{{product.product_tag}}</div>
-        {% endfor %}
-        {% endif %}
-        <!-- Product image-->
-        <a class="btn" href="{% url "product_detail" product.id %}">
-            <img class="card-img-top" src={{product.image.url}} alt="..." />
-        </a>
-        <!-- Product details-->
-        <div class="card-body p-4">
-            <div class="text-center">
-                <!-- Product name-->
-                <h5 class="fw-bolder">{{product.product_name}}</h5>
-                <!-- Product reviews-->
-                {% if product.product_evaluation >  0 %}
-                <div class="d-flex justify-content-center small text-warning mb-2">
-                    <span class="fw-bolder">{{product.product_evaluation}}/5</span> <div class="bi-star-fill"></div>
+    <div class="col mb-5">
+        <div class="card h-100 shadow p-3">
+            <!-- Sale badge-->
+            <!-- Product image-->
+            <div class="card-img-top mb-2">
+                <div id="CarouselIndicators_{{ product.id }}"
+                     class="carousel slide"
+                     data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        {% if product.images.all.count > 1 %}
+                            {% for image in product.images.all %}
+                                {% if forloop.first %}
+                                    <button type="button"
+                                            data-bs-target="#CarouselIndicators_{{ product.id }}"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            class="active"
+                                            aria-current="true"
+                                            aria-label="Slide {{ forloop.counter0 }}">
+                                    </button>
+                                {% else %}
+                                    <button type="button"
+                                            data-bs-target="#CarouselIndicators_{{ product.id }}"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            aria-label="Slide {{ forloop.counter0 }}">
+                                    </button>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="carousel-inner">
+                        {% for image in product.images.all %}
+                            {% if forloop.first %}
+                                <div class="carousel-item active">
+                                    <img src="{{ image.thumbnail.url }}"
+                                         height="300"
+                                         width="450"
+                                         class="d-block w-100"
+                                         alt="{{ product.product_name }}"/>
+                                </div>
+                            {% else %}
+                                <div class="carousel-item">
+                                    <img src="{{ image.thumbnail.url }}"
+                                         height="300"
+                                         width="450"
+                                         class="d-block w-100"
+                                         alt="{{ product.product_name }}"/>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if product.images.all.count > 1 %}
+                        <button class="carousel-control-prev"
+                                type="button"
+                                data-bs-target="#CarouselIndicators_{{ product.id }}"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next"
+                                type="button"
+                                data-bs-target="#CarouselIndicators_{{ product.id }}"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    {% endif %}
                 </div>
-                {% endif %}
-                <!-- Product price-->
-                {% if product.original_price >  product.product_price%}
-                <span class="text-muted text-decoration-line-through">${{product.original_price}}</span>
-                {% endif %}
-                ${{product.product_price}}
-                
-                <div class="row">
-                    <div class="text-wrap">
-                        <p>                         
-                            {{product.product_description | truncatechars:100 }}
-                        </p>
+            </div>
+            {% for tag in product.product_tags.all %}
+                <a href="{% url 'tag_detail' tag.slug %}"
+                   blank
+                   class="text-decoration-none m-1 p-1 rounded-1 text-center"
+                   style="background-color:{{ tag.bg_color }};
+                          color:{{ tag.font_color }}">
+                    {{ tag }}
+                </a>
+            {% endfor %}
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">
+                        <a class="text-decoration-none text-dark"
+                           href="{% url 'product_detail' product.slug %}">{{ product.product_name }}</a>
+                    </h5>
+                    <!-- Product reviews-->
+                    {% if product.product_evaluation > 0 %}
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <span class="fw-bolder">{{ product.product_evaluation }}/5</span>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                    {% endif %}
+                    <!-- Product price-->
+                    ${{ product.get_product_price_range }}
+                    {% if product.is_available %}
+                        <div id="id_is_available" class="fw-bold text-success">Available</div>
+                    {% else %}
+                        <div id="id_is_available"  class="fw-bold text-danger">Sold out</div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="text-wrap">
+                            <p>{{ product.product_short_description | truncatechars:200 | safe }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Product actions-->
-        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-            <div class="text-center">
-                <a class="btn btn-outline-dark mt-auto" href="{% url "product_detail" product.id %}">
-                More details
-                </a>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center">
+                    <a class="btn btn-outline-dark mt-auto"
+                       href="{% url 'product_detail' product.slug %}">More details</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{% empty %}
+    <h5>No products yet</h5>
 {% endfor %}
-{% else %}
-<h5>No products yet</h5>
-{% endif %}

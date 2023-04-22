@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+    <div class="container px-4 px-lg-5 mt-5">
+        <section class="h-100 h-custom">
+            <div class="container h-100 py-5">
+                <div class="row">
+                    <h4>Orders</h4>
+                    <hr class="border border-2 opacity-50 d-none d-lg-block" />
+                    {% for order in orders %}
+                        <div class="row mb-2">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5>
+                                            <a href="{% url 'order_detail' order.id %}"
+                                               class="text-dark text-decoration-none">{{ order }}</a>
+                                        </h5>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mb-2"/>
+                    {% empty %}
+                        <p>No results found</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}

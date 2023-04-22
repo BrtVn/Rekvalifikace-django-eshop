@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+    <div class="container px-4 px-lg-5 mt-5">
+        <section class="h-100 h-custom">
+            <div class="container h-100 py-5">
+                <div class="row">
+                    <h4>{{ order }}</h4>
+                    <hr class="border border-2 opacity-50 d-none d-lg-block" />
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3" id="shoppingBag">
+                                        <h5 class="card-header">Shopping Bag</h5>
+                                        <div class="card-body p-4">
+                                            <div class="row fw-bold text-center">
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 d-none d-lg-block text-start">
+                                                            <span class="h5">Item</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Item price</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Quantity</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Price</span>
+                                                        </div>
+                                                    </div>
+                                                    {% for item in cart_items %}
+                                                        {% if forloop.counter0 %}
+                                                            <hr/>
+                                                        {% else %}
+                                                            <hr class="border border-2 opacity-50 d-none d-lg-block" />
+                                                        {% endif %}
+                                                        <div class="row mb-3 mt-3 align-items-center">
+                                                            <div class="col-12 col-lg-4 pb-3 pb-lg-0">
+                                                                <div class="row">
+                                                                    <div class="col-6 col-lg-6 align-items-center">
+                                                                        <img src="{{ item.product_variant.product.images.first.cart_thumbnail.url|default:'None' }}"
+                                                                             class="img-fluid rounded-3"
+                                                                             height="150"
+                                                                             width="120"
+                                                                             alt="{{ item.product_variant.product.product_name }}"/>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <div class="col pb-lg-3 pb-sm-0">
+                                                                            <a class="text-decoration-none text-dark"
+                                                                               href="{% url 'product_detail' item.product_variant.product.slug %}">{{ item.product_variant.product.product_name }}</a>
+                                                                        </div>
+                                                                        <div class="col pb-0">
+                                                                            <span class="text-muted">Variant:</span> {{ item.product_variant.variant }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle">
+                                                                <span class="d-lg-none text-muted">Item price:</span> ${{ item.price }}
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle">
+                                                                <span class="d-lg-none text-muted">Item quantity:</span> {{ item.quantity }}
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle">
+                                                                <span class="d-lg-none text-muted">Total item price:</span> ${{ item.get_total_item_price }}
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <hr class="border border-2 opacity-50" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xl-12 mb-4 mb-md-0">
+                                            <div class="row">
+                                                <div class="col-md-6 d-flex align-items-stretch">
+                                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                        <h5 class="card-header">Billing address</h5>
+                                                        <div class="row p-3 fw-bold">
+                                                            <div class="col-6 text-muted">Name</div>
+                                                            <div class="col-6">{{ billing_info.name }}</div>
+                                                            <div class="col-6 text-muted">Address line 1</div>
+                                                            <div class="col-6">{{ billing_info.address_line1 }}</div>
+                                                            <div class="col-6 text-muted">Address line 2</div>
+                                                            <div class="col-6">{{ billing_info.address_line2 }}</div>
+                                                            <div class="col-6 text-muted">City</div>
+                                                            <div class="col-6">{{ billing_info.city }}</div>
+                                                            <div class="col-6 text-muted">Postal code</div>
+                                                            <div class="col-6">{{ billing_info.postal_code }}</div>
+                                                            <div class="col-6 text-muted">Country</div>
+                                                            <div class="col-6">{{ billing_info.country }}</div>
+                                                            <div class="col-6 text-muted">VAT ID</div>
+                                                            <div class="col-6">{{ billing_info.vat_id }}</div>
+                                                            <div class="col-6 text-muted">
+                                                                TAX ID
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ billing_info.tax_id }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 d-flex align-items-stretch">
+                                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                        <h5 class="card-header">
+                                                            Delivery address
+                                                        </h5>
+                                                        <div class="row p-3 fw-bold">
+                                                            <div class="col-6 text-muted">
+                                                                Name
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.name }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                Address line 1
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.address_line1 }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                Address line 2
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.address_line2 }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                City
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.city }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                Postal code
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.postal_code }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                Country
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.country }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                Delivery phone
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ delivery_info.delivery_phone }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                            </div>
+                                                            <div class="col-6">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                <h5 class="card-header">
+                                                    Order details
+                                                </h5>
+                                                <div class="row p-3 fw-bold">
+                                                    <div class="col-6 text-muted">
+                                                        Note
+                                                    </div>
+                                                    <div class="col-6">
+                                                        {{ order.note }}
+                                                    </div>
+                                                    <div class="col-6 text-muted">
+                                                        Delivery method
+                                                    </div>
+                                                    <div class="col-6">
+                                                        {{ cart.delivery_method }}
+                                                    </div>
+                                                    <div class="col-6 text-muted">
+                                                        Payment method
+                                                    </div>
+                                                    <div class="col-6">
+                                                        {{ cart.payment_method }}
+                                                    </div>
+                                                    <div class="col-6 text-muted">
+                                                        Order status
+                                                    </div>
+                                                    <div class="col-6">
+                                                        {% if order.status == "PLACED" %}
+                                                            <span class="text-warning">{{ order.status }}</span>
+                                                        {% elif order.status == "PENDING" %}
+                                                            <span class="text-danger">{{ order.status }}</span>
+                                                        {% else %}
+                                                            <span class="text-success">{{ order.status }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}

@@ -1,0 +1,33 @@
+{% extends "moderator/moderator_layout.html" %}
+{% block moderator_content %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Cart</th>
+                <th scope="col">Created at</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    {% if order.customer %}
+                        <td>{{ order.customer }}</td>
+                    {% else %}
+                        <td>Anonymous customer</td>
+                    {% endif %}
+                    <td>{{ order.cart }}</td>
+                    <td>{{ order.created_at }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{% url 'update_order' order.id %}">Edit</a>
+                        <a class="btn btn-outline-danger"
+                           href="{% url 'delete_order' order.id %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock moderator_content %}

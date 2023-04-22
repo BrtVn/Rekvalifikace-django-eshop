@@ -1,0 +1,49 @@
+{% extends "moderator/moderator_layout.html" %}
+{% load django_bootstrap5 %}
+{% block moderator_content %}
+    <div class="container mb-5">
+        <form class="form" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Customer</h4>
+                        </div>
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Delivery Informations</h4>
+                        </div>
+                        <div class="d-grid gap-2">
+                            {{ delivery_formset.management_form }}
+                            {% for form in delivery_formset %}
+                                <button class="m-2 btn btn-outline-dark"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#deliveryInfoForm-{{ forloop.counter }}"
+                                        aria-expanded="false"
+                                        aria-controls="deliveryInfoForm-{{ forloop.counter }}">
+                                    {% if form.alias.value %}
+                                        Edit address "{{ form.alias.value|default_if_none:"" }}"
+                                    {% else %}
+                                        New address
+                                    {% endif %}
+                                </button>
+                                <div class="collapse" id="deliveryInfoForm-{{ forloop.counter }}">{% bootstrap_form form %}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 text-center">
+                    <button class="btn btn-secondary btn-dark btn-login" type="submit">Save Customer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock moderator_content %}
+{% block extra_body %}
+{% endblock extra_body %}

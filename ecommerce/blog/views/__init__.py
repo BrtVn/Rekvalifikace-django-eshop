@@ -1,2 +1,2 @@
-from .post_view import *
+from .posts_views import *
 from .comment_view import *

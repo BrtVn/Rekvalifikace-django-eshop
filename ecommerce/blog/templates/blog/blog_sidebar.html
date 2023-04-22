@@ -1,0 +1,32 @@
+{% block blog_sidebar %}
+    <!-- Side widget-->
+    <div class="card mb-4">
+        <div class="card-header">Blog</div>
+        <div class="card-body">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur laborum fugiat autem nam quam beatae vitae repellendus harum totam reiciendis accusamus, sed, ipsa laudantium natus consequatur incidunt sunt voluptas perspiciatis?
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Categories</div>
+        <div class="card-body">
+            <div class="row">
+                {% load posts_tags %}
+                {% get_post_categories as categories %}
+                {% for category in categories %}
+                    <div class="col-sm-6">
+                        <ul class="list-unstyled mb-2">
+                            <li>
+                                <a class="btn text-reset text-decoration-none w-100 text-start"
+                                   href="{% url 'post_category_detail' category.slug %}">{{ category.category_name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% empty %}
+                    <li >
+                        <span class="text-disabled">No categories yet</span>
+                    </li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock blog_sidebar %}

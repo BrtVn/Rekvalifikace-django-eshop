@@ -1,0 +1,137 @@
+{% block footer %}
+    <footer class="text-center text-lg-start bg-white text-muted">
+        <!-- Section: Social media -->
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            {% if general_info.has_social_accounts %}
+                <!-- Left -->
+                <div class="me-5 d-none d-lg-block">
+                    <span>Get connected with us on social networks:</span>
+                </div>
+                <!-- Left -->
+                <!-- Right -->
+                <div>
+                    {% if general_info.facebook_url %}
+                        <a href="{{ general_info.facebook_url }}"
+                           target="_blank"
+                           class="me-4 link-secondary text-decoration-none">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                    {% endif %}
+                    {% if general_info.twitter_url %}
+                        <a href="{{ general_info.twitter_url }}"
+                           target="_blank"
+                           class="me-4 link-secondary text-decoration-none">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                    {% endif %}
+                    {% if general_info.google_url %}
+                        <a href="{{ general_info.google_url }}"
+                           target="_blank"
+                           class="me-4 link-secondary text-decoration-none">
+                            <i class="bi bi-google"></i>
+                        </a>
+                    {% endif %}
+                    {% if general_info.instagram_url %}
+                        <a href="{{ general_info.instagram_url }}"
+                           target="_blank"
+                           class="me-4 link-secondary text-decoration-none">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    {% endif %}
+                    {% if general_info.linkedin_url %}
+                        <a href="{{ general_info.linkedin_url }}"
+                           target="_blank"
+                           class="me-4 link-secondary text-decoration-none">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    {% endif %}
+                    {% if general_info.github_url %}
+                        <a href="{{ general_info.github_url }}"
+                           target="_blank"
+                           class="me-4 link-secondary text-decoration-none">
+                            <i class="bi bi-github"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <!-- Right -->
+            {% endif %}
+        </section>
+        <!-- Section: Social media -->
+        <!-- Section: Links  -->
+        <section>
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">{{ general_info.company_name }}</h6>
+                        <p>{{ general_info.company_info | safe }}</p>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Blog</h6>
+                        {% load posts_tags %}
+                        {% get_post_categories as categories %}
+                        {% for category in categories %}
+                            <p>
+                                <a class="text-reset"
+                                   href="{% url 'post_category_detail' category.slug %}">{{ category.category_name }}</a>
+                            </p>
+                        {% empty %}
+                            <p>
+                                <span class="text-reset">No categories yet</span>
+                            </p>
+                        {% endfor %}
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Useful links</h6>
+                        {% for article in articles %}
+                            <p>
+                                <a class="text-reset" href="{% url 'post_detail' article.slug %}">{{ article.title }}</a>
+                            </p>
+                        {% empty %}
+                            <p>
+                                <span class="text-reset">No articles yet</span>
+                            </p>
+                        {% endfor %}
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p>
+                            <i class="bi bi-house me-3 text-secondary"></i>{{ contact.get_sigle_line_address }}
+                        </p>
+                        <p>
+                            <i class="bi bi-envelope me-3 text-secondary"></i>
+                            <a class="link-secondary" href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                        </p>
+                        <p>
+                            <i class="bi bi-phone me-3 text-secondary"></i>
+                            <a class="link-secondary" href="tel:{{ contact.mobile_phone }}">{{ contact.mobile_phone }}</a>
+                        </p>
+                        <p>
+                            <i class="bi bi-telephone me-3 text-secondary"></i>
+                            <a class="link-secondary" href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+        <!-- Copyright -->
+        <div class="py-5  bg-dark text-center">
+            <p class="m-0 text-center">{{ general_info.footer_copyright | safe }}</p>
+        </div>
+        <!-- Copyright -->
+    </footer>
+{% endblock footer %}

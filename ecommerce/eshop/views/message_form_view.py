@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views import generic
-from eshop.forms.message_form import ContactForm
-from eshop.forms.review_form import ReviewForm
-from eshop.models.messages import Message
 from django.contrib import messages
+from eshop.forms.message_form import ContactForm
+from eshop.models.messages import Message
+from settings.models.settings import GeneralInfo
 
 
 class ContactFormView(generic.edit.CreateView):
@@ -14,7 +14,9 @@ class ContactFormView(generic.edit.CreateView):
     def get(self, request):
         form = self.form_class(None)
         url_action = "/contact/"
+        general_info = GeneralInfo.objects.first()
         context = {"form": form,
+                   "general_info": general_info,
                    "url_action": url_action}
         return render(request, self.template_name, context)
 
@@ -26,5 +28,5 @@ class ContactFormView(generic.edit.CreateView):
             form.save()
         else:
             messages.error(request, 'Message error')
-        
+
         return render(request, self.template_name, {"form": form})

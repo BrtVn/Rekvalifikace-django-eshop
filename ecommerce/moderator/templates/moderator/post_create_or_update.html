@@ -1,0 +1,36 @@
+{% extends "moderator/moderator_layout.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block moderator_content %}
+    <div class="container mb-5">
+        <form class="form" method="post"  enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Post:</h4>
+                        </div>
+                        {% csrf_token %}
+                        {{ form.media }}
+                        {% bootstrap_form form layout='horizontal' %}
+                    </div>
+                </div>
+                <div class="mt-5 text-center">
+                    <button class="btn btn-secondary btn-dark btn-login" type="submit">Save Post</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock moderator_content %}
+{% block extra_body %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'admin/js/vendor/xregexp/xregexp.min.js' %}"></script>
+    <script src="{% static 'admin/js/urlify.js' %}"></script>
+    <script>
+    slug = $('#id_slug');
+    title = $('#id_title');
+    title.keyup(function(){
+        slug.val(URLify(title.val(), 50, true));
+     });
+    </script>
+{% endblock extra_body %}

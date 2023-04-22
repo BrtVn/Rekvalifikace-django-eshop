@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models.posts import Post
+from .models.posts import Post, PostCategory
 from .models.comments import Comment
 # Register your models here.
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -22,6 +23,12 @@ class CommentAdmin(admin.ModelAdmin):
         queryset.update(active=True)
 
 
-#admin.site.register(Comment, CommentAdmin)
+@admin.register(PostCategory)
+class PostCategoryAdmin(admin.ModelAdmin):
+    list_display = ('category_name', 'slug')
+    search_fields = ['category_name', 'category_description']
+    prepopulated_fields = {'slug': ('category_name',)}
 
-#admin.site.register(Post, PostAdmin)
+# admin.site.register(Comment, CommentAdmin)
+
+# admin.site.register(Post, PostAdmin)

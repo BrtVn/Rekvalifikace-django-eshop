@@ -1,0 +1,166 @@
+{% block navigation %}
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="{% url 'index' %}">Start Shopping</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           id="navbarDropdown"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">Products</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'index' %}">All Products</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            {% load tag_tags %}
+                            {% get_tags as tags %}
+                            {% for tag in tags %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'tag_detail' tag.slug %}">{{ tag }}</a>
+                                </li>
+                            {% empty %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           id="navbarDropdown"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">Categories</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'category_list' %}">All Categories</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            {% load products_tags %}
+                            {% get_product_categories as categories %}
+                            {% for category in categories %}
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="{% url 'category_detail' category.slug %}">{{ category.category_name }}</a>
+                                </li>
+                            {% empty %}
+                                <li >
+                                    <span class="dropdown-item disabled">No categories yet</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           id="navbarDropdown"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">Blog</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'home' %}">All posts</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'post_categories' %}">All categories</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            {% load posts_tags %}
+                            {% get_post_categories as categories %}
+                            {% for category in categories %}
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="{% url 'post_category_detail' category.slug %}">{{ category.category_name }}</a>
+                                </li>
+                            {% empty %}
+                                <li >
+                                    <span class="dropdown-item disabled">No categories yet</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active"
+                           aria-current="page"
+                           href="{% url 'contact_form' %}">Contact</a>
+                    </li>
+                </ul>
+                {% include "eshop/search_form.html" with search_form=search_form %}
+                <div class="d-flex">
+                    {% load cart_tags %}
+                    <a href="{% url 'cart' %}"
+                       class="btn btn-outline-dark ms-lg-4 me-auto"
+                       type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">{% cart_item_count %}</span>
+                    </a>
+                </div>
+                <div class="d-flex">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ms-lg-4 me-lg-5">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"
+                               id="navbarDropdown"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                <i class="bi-person-fill"></i>
+                                {% if request.user.is_authenticated %}
+                                    {% if not request.user.first_name %}
+                                        user's
+                                    {% else %}
+                                        {{ request.user.first_name }}'s
+                                    {% endif %}
+                                {% endif %}
+                                Account
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user.is_superuser %}
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'list_products' %}">Administrace</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if request.user.is_customer %}
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'profile_detail' %}">Profile</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'list_orders' %}">Orders</a>
+                                        </li>
+                                    {% endif %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'account_signup' %}">Register</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        {% endblock navigation %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}
+    Blog Home - Start Bootstrap Template
+{% endblock title %}
+{% block header %}
+    Blog in style
+{% endblock header %}
+{% block content %}
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row justify-content-center">
+                {% for category in categories %}
+                    <div>
+                        <a class="btn mt-2 w-100"
+                           href="{% url 'post_category_detail' category.slug %}">
+                            <h2>{{ category.category_name }}</h2>
+                            <p>{{ category.category_description | safe }}</p>
+                        </a>
+                    </div>
+                {% empty %}
+                    <h5>No categories yet</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock content %}

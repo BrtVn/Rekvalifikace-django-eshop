@@ -1,25 +1,165 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    {% extends "base.html" %}
-    {% block content %}
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5"> 
-            <h2>Košík</h2>
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for product in orders %}
-            {{ product.customer}}
-            {% empty %}
-            <h5>No products yet.</h5>
-            {% endfor %}
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+    <div class="container px-4 px-lg-5 mt-5">
+        <section class="h-100 h-custom">
+            <div class="container h-100 py-5">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12">
+                        {% if cart_items %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3" id="shoppingBag">
+                                        <h5 class="card-header">Shopping Bag</h5>
+                                        <div class="card-body p-4">
+                                            <div class="row fw-bold text-center">
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 d-none d-lg-block text-start">
+                                                            <span class="h5">Item</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Item stock</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Item price</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Quantity</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block">
+                                                            <span class="text-muted">Price</span>
+                                                        </div>
+                                                        <div class="col d-none d-lg-block"></div>
+                                                    </div>
+                                                    {% for item in cart_items %}
+                                                        {% if forloop.counter0 %}
+                                                            <hr/>
+                                                        {% else %}
+                                                            <hr class="border border-2 opacity-50 d-none d-lg-block" />
+                                                        {% endif %}
+                                                        <div class="row mb-3 mt-3 align-items-center">
+                                                            <div class="col-12 col-lg-4 pb-3 pb-lg-0">
+                                                                <div class="row">
+                                                                    <div class="col-6 col-lg-6 align-items-center">
+                                                                        <img src="{{ item.product_variant.product.images.first.cart_thumbnail.url|default:'None' }}"
+                                                                             class="img-fluid rounded-3"
+                                                                             height="150"
+                                                                             width="120"
+                                                                             alt="{{ item.product_variant.product.product_name }}"/>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <div class="col pb-lg-3 pb-sm-0">
+                                                                            <a class="text-decoration-none text-dark"
+                                                                               href="{% url 'product_detail' item.product_variant.product.slug %}">{{ item.product_variant.product.product_name }}</a>
+                                                                        </div>
+                                                                        <div class="col pb-0">
+                                                                            <span class="text-muted">Variant:</span> {{ item.product_variant.variant }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle mb-2 mb-lg-0">
+                                                                {% if item.product_variant.quantity %}
+                                                                    <span class="text-success">Avaiable</span> ({{ item.product_variant.quantity }})
+                                                                {% else %}
+                                                                    <span class="text-danger">Sold out</span>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle">
+                                                                <span class="d-lg-none text-muted">Item price:</span> ${{ item.price }}
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle">
+                                                                <form action="{% url 'update_item_cart' item.id %}"
+                                                                      method="post"
+                                                                      class="d-flex">
+                                                                    {% csrf_token %}
+                                                                    {{ item.update_item_form.quantity }}
+                                                                    <button type="submit" class="btn btn-link px-2">
+                                                                        <i class="bi bi-arrow-clockwise"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                            <div class="col-6 col-sm-3 col-lg align-middle">
+                                                                <span class="d-lg-none text-muted">Total item price:</span> ${{ item.get_total_item_price }}
+                                                            </div>
+                                                            <div class="col-12 col-sm-12 col-lg align-middle mt-3">
+                                                                <a class="btn btn-link px-2" href="{% url 'remove_from_cart' item.id %}">
+                                                                    <i class="text-danger bi bi-trash"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <hr class="border border-2 opacity-50" />
+                                                    <div class="row">
+                                                        <div class="form-floating col-12 col-lg-6 d-flex mb-3 mb-lg-0">
+                                                            <input type="text" id="form1" class="form-control"/>
+                                                            <label class="fw-normal ms-1 text-start" for="form1">Discound code</label>
+                                                            <button type="button" class="btn btn-outline-dark btn-lg ms-3">Apply</button>
+                                                        </div>
+                                                        <div class="col-12 col-lg-6 text-center">
+                                                            <span class="text-muted fs-5">Subtotal:</span>
+                                                            <span class="fw-bold fs-5">${{ cart.get_subtotal_cart_price }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xl-12 mb-4 mb-md-0">
+                                    <div class="row">
+                                        <div class="col-md-6 d-flex align-items-stretch">
+                                            <div class="card justify-content-between rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                <h5 class="card-header">{{ cart_delivery_method_form.delivery_methods.label }}</h5>
+                                                <form action="{% url 'update_delivery_method_cart' request.session.cart_id %}"
+                                                      method="post">
+                                                    <div class="card-body p-4 d-flex">
+                                                        <!--tady h-100-->
+                                                        <div class="row">
+                                                            {% csrf_token %}
+                                                            <div class="col-12 h-100">{{ cart_delivery_method_form.delivery_methods }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer text-center">
+                                                        <button type="submit" class="btn btn-outline-dark px-2">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 d-flex align-items-stretch">
+                                            <div class="card justify-content-between rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                <h5 class="card-header">{{ cart_payment_method_form.payment_methods.label }}</h5>
+                                                <form action="{% url 'update_payment_method_cart' request.session.cart_id %}"
+                                                      method="post">
+                                                    <div class="card-body p-4">
+                                                        <div class="row">
+                                                            {% csrf_token %}
+                                                            <div class="col-12">{{ cart_payment_method_form.payment_methods }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer text-center">
+                                                        <button type="submit" class="btn btn-outline-dark px-2">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center">
+                                    <a href="{% url 'create_order' %}" class="btn btn-dark btn-lg">Proceed to checkout ${{ cart.get_total_cart_price }}</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p>Your cart is empty.</p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-    {% endblock %}
-        
-
-</body>
-</html>
+        </section>
+    </div>
+{% endblock content %}

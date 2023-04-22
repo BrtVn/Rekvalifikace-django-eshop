@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load custom_filters %}
+{% block content %}
+    <div class="container px-4 px-lg-5 mt-5">
+        <section class="h-100 h-custom">
+            <div class="container h-100 py-5">
+                <div class="row">
+                    <h4>Search results</h4>
+                    <hr class="border border-2 opacity-50 d-none d-lg-block" />
+                    {% for results in search_results %}
+                        {% for result in results %}
+                            {% if result|isinstance_filter:'blog.PostCategory' %}
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5>
+                                                    <a href="{% url 'post_category_detail' result.slug %}"
+                                                       class="text-dark text-decoration-none">{{ result.category_name }}</a>
+                                                </h5>
+                                            </div>
+                                            <div class="col">{{ result.category_description|striptags|truncatechars:250 }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-2"/>
+                            {% elif result|isinstance_filter:'eshop.ProductCategory' %}
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5>
+                                                    <a href="{% url 'category_detail' result.slug %}"
+                                                       class="text-dark text-decoration-none">{{ result.category_name }}</a>
+                                                </h5>
+                                            </div>
+                                            <div class="col">{{ result.category_description|striptags|truncatechars:250 }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-2"/>
+                            {% elif result|isinstance_filter:'blog.Post' %}
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <img src="{{ result.search_thumbnail.url }}"
+                                             height="120"
+                                             width="240"
+                                             alt="{{ result.title }}"/>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5>
+                                                    <a href="{% url 'post_detail' result.slug %}"
+                                                       class="text-dark text-decoration-none">{{ result.title }}</a>
+                                                </h5>
+                                            </div>
+                                            <div class="col">{{ result.content|striptags|truncatechars:250 }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-2"/>
+                            {% elif result|isinstance_filter:'eshop.Product' %}
+                                <div class="row mb-2">
+                                    <div class="col-3 text-center">
+                                        <img src="{{ result.images.first.cart_thumbnail.url|default:'None' }}"
+                                             height=""
+                                             width="120"
+                                             alt="{{ result.title }}"/>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5>
+                                                    <a href="{% url 'product_detail' result.slug %}"
+                                                       class="text-dark text-decoration-none">{{ result.product_name }}</a>
+                                                </h5>
+                                            </div>
+                                            <div class="col">{{ result.product_short_description|striptags|truncatechars:250 }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-2"/>
+                            {% endif %}
+                        {% empty %}
+                        {% endfor %}
+                    {% empty %}
+                        <p>No results found</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}

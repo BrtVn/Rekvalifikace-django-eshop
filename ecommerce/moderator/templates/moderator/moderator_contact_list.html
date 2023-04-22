@@ -1,0 +1,35 @@
+{% extends "moderator/moderator_layout.html" %}
+{% block moderator_content %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ contact.name }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{% url 'update_contact' contact.id %}">Edit</a>
+                        {% comment %} <a class="btn btn-outline-danger" href="{% url 'delete_contact' contact.id %}">Delete</a> {% endcomment %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% if not contacts %}
+            <tfoot>
+                <tr>
+                    <th colspan="4">
+                        <a href="{% url 'create_contact' %}">Add contact</a>
+                    </th>
+                </tr>
+            </tfoot>
+        {% endif %}
+    </table>
+{% endblock moderator_content %}
