@@ -178,5 +178,62 @@ urlpatterns = [
         "tags/delete/<int:pk>/",
         views.TagDeleteView.as_view(),
         name="delete_tag",
+    ), path(
+        "delivery-methods/",
+        views.DeliveryMethodListView.as_view(),
+        name="list_delivery_methods",
+    ),
+    path(
+        "delivery-methods/create/",
+        views.DeliveryMethodCreateView.as_view(),
+        name="create_delivery_method",
+    ),
+    path(
+        "delivery-methods/update/<int:pk>/",
+        views.DeliveryMethodUpdateView.as_view(),
+        name="update_delivery_method",
+    ),
+    path(
+        "delivery-methods/delete/<int:pk>/",
+        views.DeliveryMethodDeleteView.as_view(),
+        name="delete_delivery_method",
+    ), path(
+        "payment-methods/",
+        views.PaymentMethodListView.as_view(),
+        name="list_payment_methods",
+    ),
+    path(
+        "payment-methods/create/",
+        views.PaymentMethodCreateView.as_view(),
+        name="create_payment_method",
+    ),
+    path(
+        "payment-methods/update/<int:pk>/",
+        views.PaymentMethodUpdateView.as_view(),
+        name="update_payment_method",
+    ),
+    path(
+        "payment-methods/delete/<int:pk>/",
+        views.PaymentMethodDeleteView.as_view(),
+        name="delete_payment_method",
+    ), path(
+        "discount-codes/",
+        views.CartDiscountListView.as_view(),
+        name="list_discount_codes",
+    ),
+    path(
+        "discount-codes/create/",
+        views.CartDiscountCreateView.as_view(),
+        name="create_discount_code",
+    ),
+    path(
+        "discount-codes/update/<int:pk>/",
+        views.CartDiscountUpdateView.as_view(),
+        name="update_discount_code",
+    ),
+    path(
+        "discount-codes/delete/<int:pk>/",
+        views.CartDiscountDeleteView.as_view(),
+        name="delete_discount_code",
     ),
 ]

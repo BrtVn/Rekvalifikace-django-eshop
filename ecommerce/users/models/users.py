@@ -60,8 +60,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user with that email address already exists."),
         },
     )
-    phone = PhoneNumberField(
-        _("phone number"), null=False, blank=True)
+    phone = models.CharField(_("phone number"), max_length=15)
     profile_image = models.ImageField(
         blank=True, upload_to="users/uploads/users")
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
@@ -69,7 +68,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     preferred_billing_information = models.OneToOneField(
         "BillingInformation",
         verbose_name=_("Preferred billing information"),
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         # limit_choices_to={'pk': models.OuterRef('user_id')},
         related_name="preferred_billing_informationby_user",
         blank=True,
@@ -77,7 +76,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     preferred_delivery_information = models.OneToOneField(
         "DeliveryInformation",
         verbose_name=_("Preferred delivery information"),
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         # limit_choices_to=DeliveryInformation.objects.filter(user=self),
         related_name="preferred_delivery_information_by_user",
         blank=True,

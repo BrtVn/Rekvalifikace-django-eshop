@@ -1,7 +1,48 @@
 from django.db import models
 from django.utils.crypto import get_random_string
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
+
+
+class CartDiscount(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=20, unique=True, default="")
+    discount_type = models.CharField(
+        max_length=20,
+        choices=[('percentage', 'Percentage'), ('amount', 'Amount')],
+        default='percentage'
+    )
+    amount = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        default=0,
+        validators=[MinValueValidator(0)]
+    )
+    percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_single_use = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        string = f"{self.name} "
+        if self.discount_type == "percentage":
+            string += f"-{self.percentage} %"
+        elif self.discount_type == "amount":
+            string += f"- ${self.amount}"
+        return string
+
+    def generate_discount_code(self):
+        return get_random_string(8)
 
 
 class DeliveryMethod(models.Model):
@@ -11,21 +52,6 @@ class DeliveryMethod(models.Model):
 
     def __str__(self):
         return f"{self.name} ${self.price}"
-
-    # min_cart_price = models.DecimalField(max_digits=8, decimal_places=2)
-    # max_cart_price = models.DecimalField(max_digits=8, decimal_places=2)
-    # delivery_price = models.DecimalField(max_digits=8, decimal_places=2)
-    # estimated_delivery_time = models.PositiveIntegerField()
-    # free_from_cart_price = models.DecimalField(
-    #     max_digits=6, decimal_places=2, null=True, blank=True)
-
-    # def calculate_delivery_price(self, cart_price):
-    #     if cart_price < self.min_cart_price:
-    #         return None  # Delivery not available for cart price below minimum
-    #     elif cart_price > self.max_cart_price:
-    #         return None  # Delivery not available for cart price above maximum
-    #     else:
-    #         return self.price
 
 
 class PaymentMethod(models.Model):
@@ -46,11 +72,13 @@ CART_STATUS = (
 
 class Cart(models.Model):
     delivery_method = models.ForeignKey(
-        "DeliveryMethod", on_delete=models.PROTECT, related_name='carts', default=1, null=True, blank=True)
+        "DeliveryMethod", on_delete=models.SET_NULL, related_name='carts', default=None, null=True, blank=True)
     payment_method = models.ForeignKey(
-        "PaymentMethod", on_delete=models.PROTECT, related_name='carts', default=1, null=True, blank=True)
+        "PaymentMethod", on_delete=models.SET_NULL, related_name='carts', default=None, null=True, blank=True)
     status = models.CharField(
         choices=CART_STATUS, default="DRAFT", max_length=20)
+    code = models.ForeignKey(
+        "CartDiscount", on_delete=models.PROTECT, null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = 'Košík'
@@ -75,6 +103,13 @@ class Cart(models.Model):
 
         if self.payment_method:
             price += self.payment_method.price
+
+        if self.code:
+            if self.code.discount_type == 'percentage':
+                discount = price * self.code.percentage / 100
+                price -= discount
+            elif self.code.discount_type == 'amount':
+                price -= self.code.amount
         return price
 
     @property
@@ -148,47 +183,3 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return f"Order: {self.id}"
-
-
-class CartDiscount(models.Model):
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True, default="")
-    # discount_type = models.CharField(
-    #     max_length=20,
-    #     choices=[('percentage', 'Percentage'), ('amount', 'Amount')],
-    #     default='percentage'
-    # )
-    # amount = models.DecimalField(
-    #     max_digits=8,
-    #     decimal_places=2,
-    #     null=True,
-    #     blank=True,
-    #     default=0,
-    #     validators=[MinValueValidator(0)]
-    # )
-    # percentage = models.DecimalField(
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     null=True,
-    #     blank=True,
-    #     default=0,
-    #     validators=[MinValueValidator(0)]
-    # )
-    # start_date = models.DateField()
-    # end_date = models.DateField()
-
-    # def __str__(self):
-    #     return f"{self.name}"
-
-    # def apply_discount(self, price):
-    #     if self.discount_type == 'percentage':
-    #         discount = price * self.percentage / 100
-    #         if discount > self.amount:
-    #             return price - discount
-    #         else:
-    #             return price - self.amount
-    #     else:
-    #         return price - self.amount
-
-    # def generate_discount_code(self):
-    #     return get_random_string(8)

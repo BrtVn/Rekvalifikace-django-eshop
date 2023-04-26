@@ -1,8 +1,19 @@
-from django.forms import ModelForm, ModelChoiceField
-from django.forms import inlineformset_factory
+from django.forms import ModelForm
 
 
-from eshop.models.orders import Order, Cart, CartItem
+from eshop.models.orders import Order, Cart, CartItem, DeliveryMethod, PaymentMethod
+
+
+class DevliveryMethodForm(ModelForm):
+    class Meta:
+        model = DeliveryMethod
+        fields = "__all__"
+
+
+class PaymentMethodForm(ModelForm):
+    class Meta:
+        model = PaymentMethod
+        fields = "__all__"
 
 
 class OrderForm(ModelForm):
@@ -11,10 +22,10 @@ class OrderForm(ModelForm):
         fields = ["status"]
 
 
-class CartForm(ModelForm):
-    class Meta:
-        model = Cart
-        fields = "__all__"
+# class CartForm(ModelForm):
+#     class Meta:
+#         model = Cart
+#         fields = "__all__"
 
 
 class UpdateCartItemForm(ModelForm):

@@ -12,7 +12,7 @@
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
                         data-bs-toggle="collapse"
                         data-bs-target="#eshop-collapse"
-                        aria-expanded="false">
+                        aria-expanded="true">
                     Products
                 </button>
                 <div class="collapse" id="eshop-collapse">
@@ -76,6 +76,22 @@
             <li class="mb-1">
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
                         data-bs-toggle="collapse"
+                        data-bs-target="#marketing-collapse"
+                        aria-expanded="false">
+                    Marketing
+                </button>
+                <div class="collapse" id="marketing-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a href="{% url 'list_discount_codes' %}"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Discount codes</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse"
                         data-bs-target="#account-collapse"
                         aria-expanded="false">
                     Settings
@@ -83,12 +99,20 @@
                 <div class="collapse" id="account-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li>
+                            <a href="{% url 'list_contact' %}"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Contact</a>
+                        </li>
+                        <li>
                             <a href="{% url 'list_company_info' %}"
                                class="link-dark d-inline-flex text-decoration-none rounded">Company info</a>
                         </li>
                         <li>
-                            <a href="{% url 'list_contact' %}"
-                               class="link-dark d-inline-flex text-decoration-none rounded">Contact</a>
+                            <a href="{% url 'list_delivery_methods' %}"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Delivery methods</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'list_payment_methods' %}"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Payment methods</a>
                         </li>
                     </ul>
                 </div>

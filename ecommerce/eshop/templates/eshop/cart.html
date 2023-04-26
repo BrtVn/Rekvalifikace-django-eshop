@@ -9,7 +9,7 @@
                         {% if cart_items %}
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3" id="shoppingBag">
+                                    <div class="card rounded-1 shadow mb-5 mb-sm-3" id="shoppingBag">
                                         <h5 class="card-header">Shopping Bag</h5>
                                         <div class="card-body p-4">
                                             <div class="row fw-bold text-center">
@@ -75,7 +75,7 @@
                                                                       class="d-flex">
                                                                     {% csrf_token %}
                                                                     {{ item.update_item_form.quantity }}
-                                                                    <button type="submit" class="btn btn-link px-2">
+                                                                    <button type="submit" class="btn btn-link btn-lg px-2">
                                                                         <i class="bi bi-arrow-clockwise"></i>
                                                                     </button>
                                                                 </form>
@@ -84,7 +84,8 @@
                                                                 <span class="d-lg-none text-muted">Total item price:</span> ${{ item.get_total_item_price }}
                                                             </div>
                                                             <div class="col-12 col-sm-12 col-lg align-middle mt-3">
-                                                                <a class="btn btn-link px-2" href="{% url 'remove_from_cart' item.id %}">
+                                                                <a class="btn btn-link btn-lg px-2"
+                                                                   href="{% url 'remove_from_cart' item.id %}">
                                                                     <i class="text-danger bi bi-trash"></i>
                                                                 </a>
                                                             </div>
@@ -92,10 +93,16 @@
                                                     {% endfor %}
                                                     <hr class="border border-2 opacity-50" />
                                                     <div class="row">
-                                                        <div class="form-floating col-12 col-lg-6 d-flex mb-3 mb-lg-0">
-                                                            <input type="text" id="form1" class="form-control"/>
-                                                            <label class="fw-normal ms-1 text-start" for="form1">Discound code</label>
-                                                            <button type="button" class="btn btn-outline-dark btn-lg ms-3">Apply</button>
+                                                        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                                                            <form action="{% url 'cart_discount' %}" method="post">
+                                                                {% csrf_token %}
+                                                                {% bootstrap_form cart_discound_code_form %}
+                                                                <button type="submit" class="btn btn-outline-dark ms-3">Apply</button>
+                                                            </form>
+                                                            {% if cart.code %}
+                                                                <hr/>
+                                                                {{ cart.code }}
+                                                            {% endif %}
                                                         </div>
                                                         <div class="col-12 col-lg-6 text-center">
                                                             <span class="text-muted fs-5">Subtotal:</span>
@@ -112,7 +119,7 @@
                                 <div class="col-md-12 col-xl-12 mb-4 mb-md-0">
                                     <div class="row">
                                         <div class="col-md-6 d-flex align-items-stretch">
-                                            <div class="card justify-content-between rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                            <div class="card justify-content-between rounded-1 shadow mb-5 mb-sm-3 w-100">
                                                 <h5 class="card-header">{{ cart_delivery_method_form.delivery_methods.label }}</h5>
                                                 <form action="{% url 'update_delivery_method_cart' request.session.cart_id %}"
                                                       method="post">
@@ -130,7 +137,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 d-flex align-items-stretch">
-                                            <div class="card justify-content-between rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                            <div class="card justify-content-between rounded-1 shadow mb-5 mb-sm-3 w-100">
                                                 <h5 class="card-header">{{ cart_payment_method_form.payment_methods.label }}</h5>
                                                 <form action="{% url 'update_payment_method_cart' request.session.cart_id %}"
                                                       method="post">

@@ -4,31 +4,30 @@
         <thead>
             <tr>
                 <th scope="col">Index</th>
-                <th scope="col">Email</th>
                 <th scope="col">Name</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for user in users %}
+            {% for method in payment_methods %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.get_full_name }}</td>
+                    <td>{{ method.name }}</td>
                     <td>
-                        <a class="btn btn-success" href="{% url 'update_customer' user.id %}">Edit</a>
+                        <a class="btn btn-success"
+                           href="{% url 'update_payment_method' method.id %}">Edit</a>
                         <a class="btn btn-outline-danger"
-                           href="{% url 'delete_customer' user.id %}">Delete</a>
+                           href="{% url 'delete_payment_method' method.id %}">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
-        {% comment %} <tfoot>
+        <tfoot>
             <tr>
                 <th colspan="4">
-                    <a href="{% url 'create_customer' %}">Add more customers</a>
+                    <a href="{% url 'create_payment_method' %}">Add more methods</a>
                 </th>
             </tr>
-        </tfoot> {% endcomment %}
+        </tfoot>
     </table>
 {% endblock moderator_content %}

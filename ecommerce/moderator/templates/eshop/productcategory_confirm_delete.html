@@ -1,7 +1,18 @@
-<form method="post">
-    {% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    {{ form }}
-    <input type="submit" value="Confirm">
-    <a href={% url 'list_categories' %}>No</a>
-</form>
+{% extends "account/base.html" %}
+{% block form %}
+    <h5>Confirm Delete</h5>
+    <form method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        {{ form.as_p }}
+        <div class="row text-center">
+            <div class="col">
+                <input class="btn btn-dark w-75" type="submit" value="Confirm"/>
+            </div>
+            <div class="col">
+                <a class="btn btn-danger w-75"
+                   href="{% url 'list_product_categories' %}">No</a>
+            </div>
+        </div>
+    </form>
+{% endblock form %}

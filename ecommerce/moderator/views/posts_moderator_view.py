@@ -17,7 +17,7 @@ class PostCategoryCreateView(LoginRequiredMixin, CreateView):
     model = PostCategory
     form_class = PostCategoryForm
     success_url = reverse_lazy("list_post_categories")
-    template_name = "moderator/category_create_or_update.html"
+    template_name = "moderator/post_category_create_or_update.html"
 
 
 class PostCategoryUpdateView(
@@ -27,7 +27,7 @@ class PostCategoryUpdateView(
     model = PostCategory
     form_class = PostCategoryForm
     success_url = reverse_lazy("list_post_categories")
-    template_name = "moderator/category_create_or_update.html"
+    template_name = "moderator/post_category_create_or_update.html"
 
 
 class PostCategoryDeleteView(

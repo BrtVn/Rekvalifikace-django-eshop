@@ -10,12 +10,12 @@
                             {% csrf_token %}
                             <div class="row pb-3">
                                 <div class="col">
-                                    <a href="{% url 'cart' %}" class="btn btn-outline-dark shadow-lg">Back to cart</a>
+                                    <a href="{% url 'cart' %}" class="btn btn-outline-dark">Back to cart</a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="card rounded-2 border-dark shadow-lg mb-5 mb-sm-3 w-100">
+                                    <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                         <h5 class="card-header">Customer informations</h5>
                                         <div class="card-body p-4">
                                             <div class="row">
@@ -27,10 +27,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-4">
                                 <div class="col-12 col-sm-4 d-flex align-items-stretch">
-                                    <div class="card rounded-2 shadow-lg border-dark mb-5 mb-sm-3 w-100">
+                                    <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                         <h5 class="card-header">Billing informations</h5>
+                                        <h6 class="text-danger text-center p-2">Don't forget to fill out this form!</h6>
                                         <div class="card-body p-4">
                                             <div class="row">
                                                 <div class="col">
@@ -39,7 +40,7 @@
                                                             <div class="col-6 text-center pb-3">
                                                                 {% if customer.preferred_billing_information == billing_information %}
                                                                     <a href="{% url 'update_preferred_billing_information' billing_information.id %}"
-                                                                       class="btn btn-dark shadow-lg w-75">{{ billing_information.alias }}</a>
+                                                                       class="btn btn-dark w-75">{{ billing_information.alias }}</a>
                                                                 {% else %}
                                                                     <a href="{% url 'update_preferred_billing_information' billing_information.id %}"
                                                                        class="btn btn-outline-dark w-75">{{ billing_information.alias }}</a>
@@ -59,8 +60,9 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-4 d-flex align-items-stretch">
-                                    <div class="card rounded-2 shadow-lg border-dark mb-5 mb-sm-3 w-100">
+                                    <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                         <h5 class="card-header">Delivery informations</h5>
+                                        <h6 class="text-danger text-center p-2">Don't forget to fill out this form!</h6>
                                         <div class="card-body p-4">
                                             <div class="row">
                                                 <div class="col">
@@ -69,7 +71,7 @@
                                                             <div class="col-6 text-center pb-3">
                                                                 {% if customer.preferred_delivery_information == delivery_information %}
                                                                     <a href="{% url 'update_preferred_delivery_information' delivery_information.id %}"
-                                                                       class="btn btn-dark shadow-lg w-75">{{ delivery_information.alias }}</a>
+                                                                       class="btn btn-dark w-75">{{ delivery_information.alias }}</a>
                                                                 {% else %}
                                                                     <a href="{% url 'update_preferred_delivery_information' delivery_information.id %}"
                                                                        class="btn btn-outline-dark w-75">{{ delivery_information.alias }}</a>
@@ -90,7 +92,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-4 d-flex align-items-stretch">
-                                    <div class="card rounded-2 shadow-lg border-dark mb-5 mb-sm-3 w-100">
+                                    <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                         <h5 class="card-header">Cart</h5>
                                         <div class="card-body p-4 fw-bold">
                                             {% load cart_tags %}
@@ -130,6 +132,11 @@
                                                     </div>
                                                     <hr/>
                                                     <div class="row pb-3">
+                                                        <div class="col text-muted">Discount</div>
+                                                        <div class="col">{{ cart.code }}</div>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="row pb-3">
                                                         <div class="col text-muted">Total price</div>
                                                         <div class="col">$ {{ cart.get_total_cart_price }}</div>
                                                     </div>
@@ -139,7 +146,9 @@
                                                     </div>
                                                 </div>
                                             {% else %}
-                                                <p>Sorry, there are no items in the cart.</p>
+                                                <p>
+                                                    Sorry, there are no items in the cart.
+                                                </p>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -147,10 +156,12 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <a href="{% url 'cart' %}" class="btn btn-outline-dark btn-lg shadow-lg">Back to cart</a>
+                                    <a href="{% url 'cart' %}" class="btn btn-outline-dark btn-lg">Back to cart</a>
                                 </div>
                                 <div class="col text-end">
-                                    <button class="btn btn-dark btn-lg shadow-lg "  type="submit">Create Order</button>
+                                    <button class="btn btn-dark btn-lg"  type="submit">
+                                        Create Order
+                                    </button>
                                 </div>
                             </div>
                         </form>

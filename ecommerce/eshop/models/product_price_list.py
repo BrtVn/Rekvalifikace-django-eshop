@@ -17,4 +17,4 @@ class ProductPriceList(models.Model):
         verbose_name_plural = "Ceníky produktů"
 
     def __str__(self) -> str:
-        return self.price_list_name
+        return f"{self.price_list_name}"

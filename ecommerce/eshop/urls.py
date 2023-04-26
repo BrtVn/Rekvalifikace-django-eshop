@@ -28,6 +28,7 @@ urlpatterns = [
          views.CartPaymentMethodView.as_view(), name='update_payment_method_cart'),
     path('cart/update/delivery-method/<int:pk>/',
          views.CartDeliveryMethodView.as_view(), name='update_delivery_method_cart'),
+    path("cart/discount-code", views.CartDiscountView.as_view(), name="cart_discount"),
     path('order/create/',
          views.CreateOrderView.as_view(), name='create_order'),
     path('order/create/preferred-billing-information/<int:pk>/',

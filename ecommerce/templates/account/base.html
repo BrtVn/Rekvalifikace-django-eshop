@@ -1,22 +1,15 @@
 {% extends "base.html" %}
-
 {% block content %}
-
-<div class="container">
-    <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="card border-1 shadow rounded-3 my-5">
-                <div class="card-body p-4 p-sm-5">
-                    {% block form %}
-
-
-
-                    {% endblock %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card shadow rounded-3 my-5">
+                    <div class="card-body p-4 p-sm-5">
+                        {% block form %}
+                        {% endblock form %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 {% endblock %}
-

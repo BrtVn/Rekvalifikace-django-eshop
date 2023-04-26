@@ -8,10 +8,11 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import redirect, render,  HttpResponseRedirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.core.exceptions import ValidationError
 from django.views.generic import ListView, FormView, CreateView, DeleteView, UpdateView, View, DetailView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from eshop.models.orders import Cart, CartItem, Order
+from eshop.models.orders import Cart, CartItem, Order, CartDiscount
 from eshop.forms.cart_forms import (
     CustomerInformationForm,
     CreateCartItemForm,
@@ -132,12 +133,17 @@ class CreateOrderView(CartMixin, CreateView):
 
                 order.cart.status = "PLACED"
                 order.status = "PLACED"
-                order.cart.save()
+
                 customer = self.request.user
                 if not customer.is_authenticated:
                     customer = None
                 order.customer = customer
                 order.total_price = order.cart.get_total_cart_price
+
+                if order.cart.code.is_single_use:
+                    order.cart.code.is_active = False
+                    order.cart.code.save()
+                order.cart.save()
                 order.save()
                 messages.success(
                     self.request, "Order successfuly finished.")
@@ -256,7 +262,8 @@ class CartListView(CartMixin, ListView):
 
             context["cart_delivery_method_form"] = cart_delivery_method_form
             context["cart_payment_method_form"] = cart_payment_method_form
-
+            cart_discound_code_form = ApplyCartDiscountForm()
+            context["cart_discound_code_form"] = cart_discound_code_form
         return context
 
 
@@ -272,6 +279,7 @@ class AddToCartView(CartMixin, CreateView):
         cart = self.get_cart()
         if not cart:
             cart = Cart.objects.create()
+            print(cart.id)
             self.request.session['cart_id'] = cart.id
 
         cart_item, created = CartItem.objects.get_or_create(
@@ -364,11 +372,20 @@ class CartDiscountView(CartMixin, FormView):
     success_url = reverse_lazy('cart')
 
     def form_valid(self, form):
+        code_form = form.cleaned_data["code"]
         cart = self.get_cart()
-        # discount =
+        code = None
+        try:
+            code = CartDiscount.objects.get(code=code_form, is_active=True)
+
+        except CartDiscount.DoesNotExist:
+            code = None
+        if not code:
+            messages.error(
+                self.request, "Please provide valid discount code.")
+            return super().form_valid(form)
         if cart:
-            # price = cart.get_total_cart_price
-            # cart.set_total_cart_price(price)
+            cart.code = code
             cart.save()
             messages.success(
                 self.request, "The price of items was updated.")

@@ -17,7 +17,7 @@ class Product(models.Model):
     )
     product_tags = models.ManyToManyField("Tag", blank=True)
     product_evaluation = models.FloatField(default=0)
-    product_short_description = RichTextField(max_length=200,)
+    product_short_description = RichTextField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -55,7 +55,6 @@ class Product(models.Model):
         for variant in variants:
             if variant.quantity:
                 variants_list.append(variant.quantity)
-        print(variants_list)
         if variants_list:
             return True
         return False

@@ -4,7 +4,7 @@
         {% for post in posts.blog_post_categories.all %}
             <!-- Featured blog post-->
             {% if post.status == 2 %}
-                <div class="card mb-2">
+                <div class="card mb-2 shadow">
                     <a href="{% url 'post_detail' post.slug %}">
                         <img class="card-img-top"
                              src="{{ post.image_thumbnail_promoted.url }}"
@@ -27,7 +27,7 @@
                 {% if post.status == 1 %}
                     <div class="col-lg-6">
                         <!-- Blog post-->
-                        <div class="card mb-4">
+                        <div class="card mb-4 shadow">
                             <a href="{% url 'post_detail' post.slug %}">
                                 <img class="card-img-top"
                                      src="{{ post.image_thumbnail.url }}"

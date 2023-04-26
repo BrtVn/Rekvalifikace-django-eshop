@@ -11,7 +11,7 @@
                         <div class="col">
                             <div class="row">
                                 <div class="col">
-                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3" id="shoppingBag">
+                                    <div class="card rounded-1 shadow mb-5 mb-sm-3" id="shoppingBag">
                                         <h5 class="card-header">Shopping Bag</h5>
                                         <div class="card-body p-4">
                                             <div class="row fw-bold text-center">
@@ -69,6 +69,16 @@
                                                         </div>
                                                     {% endfor %}
                                                     <hr class="border border-2 opacity-50" />
+                                                    <div class="row">
+                                                        {% if cart.code %}
+                                                            <div class="col-lg-4 d-none d-lg-block"></div>
+                                                            <div class="col d-none d-lg-block"></div>
+                                                            <div class="col d-lg-block text-end">
+                                                                <span class="text-muted">Discount:</span>
+                                                            </div>
+                                                            <div class="col pe-lg-5">{{ cart.code }}</div>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -77,7 +87,7 @@
                                         <div class="col-md-12 col-xl-12 mb-4 mb-md-0">
                                             <div class="row">
                                                 <div class="col-md-6 d-flex align-items-stretch">
-                                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                    <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                                         <h5 class="card-header">Billing address</h5>
                                                         <div class="row p-3 fw-bold">
                                                             <div class="col-6 text-muted">Name</div>
@@ -90,10 +100,18 @@
                                                             <div class="col-6">{{ billing_info.city }}</div>
                                                             <div class="col-6 text-muted">Postal code</div>
                                                             <div class="col-6">{{ billing_info.postal_code }}</div>
-                                                            <div class="col-6 text-muted">Country</div>
-                                                            <div class="col-6">{{ billing_info.country }}</div>
-                                                            <div class="col-6 text-muted">VAT ID</div>
-                                                            <div class="col-6">{{ billing_info.vat_id }}</div>
+                                                            <div class="col-6 text-muted">
+                                                                Country
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ billing_info.country }}
+                                                            </div>
+                                                            <div class="col-6 text-muted">
+                                                                VAT ID
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ billing_info.vat_id }}
+                                                            </div>
                                                             <div class="col-6 text-muted">
                                                                 TAX ID
                                                             </div>
@@ -104,7 +122,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 d-flex align-items-stretch">
-                                                    <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                                    <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                                         <h5 class="card-header">
                                                             Delivery address
                                                         </h5>
@@ -163,7 +181,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
+                                            <div class="card rounded-1 shadow mb-5 mb-sm-3 w-100">
                                                 <h5 class="card-header">
                                                     Order details
                                                 </h5>
@@ -197,6 +215,16 @@
                                                         {% else %}
                                                             <span class="text-success">{{ order.status }}</span>
                                                         {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="row fw-bold fs-4">
+                                                        <div class="col-6 text-muted">
+                                                            Total order price
+                                                        </div>
+                                                        <div class="col">
+                                                            ${{ order.total_price }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

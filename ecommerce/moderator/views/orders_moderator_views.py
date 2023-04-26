@@ -1,12 +1,87 @@
 from django.db import transaction
 from django.urls import reverse_lazy
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-from eshop.models.orders import Order, CartItem
-from moderator.forms.orders_forms import OrderForm, UpdateCartItemForm
+from eshop.models.orders import Order, CartItem, DeliveryMethod, PaymentMethod
+from eshop.forms.cart_forms import BillingInformationForm, DeliveryInformationForm
+from moderator.forms.orders_forms import OrderForm, UpdateCartItemForm, DevliveryMethodForm, PaymentMethodForm
+
+
+class PaymentMethodListView(LoginRequiredMixin, ListView):
+    model = PaymentMethod
+    template_name = "moderator/payment_methods_list.html"
+    context_object_name = "payment_methods"
+
+
+class PaymentMethodCreateView(LoginRequiredMixin, CreateView):
+    model = DeliveryMethod
+    form_class = PaymentMethodForm
+    success_url = reverse_lazy("list_payment_methods")
+    template_name = "moderator/payment_method_create_or_update.html"
+
+
+class PaymentMethodUpdateView(
+    LoginRequiredMixin, UpdateView
+):  # pylint: disable=too-many-ancestors
+
+    model = PaymentMethod
+    form_class = PaymentMethodForm
+    success_url = reverse_lazy("list_payment_methods")
+    template_name = "moderator/payment_method_create_or_update.html"
+
+
+class PaymentMethodDeleteView(
+    LoginRequiredMixin, DeleteView
+):  # pylint: disable=too-many-ancestors
+    """Smazání konkrétní kategorie
+
+    Args:
+        LoginRequiredMixin (_type_): _description_
+        DeleteView (_type_): _description_
+    """
+
+    model = PaymentMethod
+    success_url = reverse_lazy("list_payment_methods")
+
+
+class DeliveryMethodListView(LoginRequiredMixin, ListView):
+    model = DeliveryMethod
+    template_name = "moderator/delivery_methods_list.html"
+    context_object_name = "delivery_methods"
+
+
+class DeliveryMethodCreateView(LoginRequiredMixin, CreateView):
+    model = DeliveryMethod
+    form_class = DevliveryMethodForm
+    success_url = reverse_lazy("list_delivery_methods")
+    template_name = "moderator/delivery_method_create_or_update.html"
+
+
+class DeliveryMethodUpdateView(
+    LoginRequiredMixin, UpdateView
+):  # pylint: disable=too-many-ancestors
+
+    model = DeliveryMethod
+    form_class = DevliveryMethodForm
+    success_url = reverse_lazy("list_delivery_methods")
+    template_name = "moderator/delivery_method_create_or_update.html"
+
+
+class DeliveryMethodDeleteView(
+    LoginRequiredMixin, DeleteView
+):  # pylint: disable=too-many-ancestors
+    """Smazání konkrétní kategorie
+
+    Args:
+        LoginRequiredMixin (_type_): _description_
+        DeleteView (_type_): _description_
+    """
+
+    model = DeliveryMethod
+    success_url = reverse_lazy("list_delivery_methods")
 
 
 class AllOrdersListView(LoginRequiredMixin, ListView):
@@ -44,7 +119,10 @@ class OrderUpdateView(
             # item.cart_item_update_form.fields['quantity'].widget.attrs[
             #     'max'] = f"{item.product_variant.quantity}"
         context["cart_items"] = cart_items
-
+        context["delivery_address_form"] = DeliveryInformationForm(
+            instance=order.delivery_info)
+        context["billing_address_form"] = BillingInformationForm(
+            instance=order.billing_info)
         return context
 
 

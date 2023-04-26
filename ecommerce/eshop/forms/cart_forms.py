@@ -54,9 +54,11 @@ class BillingInformationForm(AddressForm):
         ]
 
 
-class ApplyCartDiscountForm(forms.ModelForm):
+class ApplyCartDiscountForm(forms.Form):
+    code = forms.CharField(max_length=20, label="Discount code")
+
     class Meta:
-        model = CartDiscount
+       # model = CartDiscount
         fields = ["code"]
 
 

@@ -5,13 +5,13 @@ from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from eshop.models.products import Product, ProductCategory
 from eshop.models.tag import Tag
+from eshop.forms.tag_forms import TagForm
 from moderator.forms.products_forms import (
     ProductForm,
     ProductVariantFormSet,
     ProductImageFormSet,
     ProductCategoryForm,
 )
-from eshop.forms.tag_forms import TagForm
 
 
 class TagsListView(LoginRequiredMixin, ListView):

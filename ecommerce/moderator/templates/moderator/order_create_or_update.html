@@ -13,7 +13,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3" id="shoppingBag">
+                            <div class="card rounded-1 shadow mb-5 mb-sm-3" id="shoppingBag">
                                 <h5 class="card-header">Shopping Bag</h5>
                                 <div class="card-body p-4">
                                     <div class="row fw-bold text-center">
@@ -116,15 +116,15 @@
                         <div class="col-md-12 col-xl-12 mb-4 mb-md-0">
                             <div class="row">
                                 <div class="col-md-6 d-flex align-items-stretch">
-                                    <div class="card justify-content-between rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
-                                        <h5 class="card-header">{{ cart_delivery_method_form.delivery_methods.label }}</h5>
+                                    <div class="card justify-content-between rounded-1 shadow mb-5 mb-sm-3 w-100">
+                                        <h5 class="card-header">Billing address</h5>
                                         <form action="{% url 'update_delivery_method_cart' request.session.cart_id %}"
                                               method="post">
-                                            <div class="card-body p-4 d-flex">
-                                                <!--tady h-100-->
+                                            <div class="card-body p-4">
                                                 <div class="row">
-                                                    {% csrf_token %}
-                                                    <div class="col-12 h-100">{{ cart_delivery_method_form.delivery_methods }}</div>
+                                                    <div class="col">
+                                                        <div>{% bootstrap_form billing_address_form %}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center">
@@ -134,14 +134,15 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex align-items-stretch">
-                                    <div class="card justify-content-between rounded-1 shadow-2-strong mb-5 mb-sm-3 w-100">
-                                        <h5 class="card-header">{{ cart_payment_method_form.payment_methods.label }}</h5>
+                                    <div class="card justify-content-between rounded-1 shadow mb-5 mb-sm-3 w-100">
+                                        <h5 class="card-header">Delivery address</h5>
                                         <form action="{% url 'update_payment_method_cart' request.session.cart_id %}"
                                               method="post">
                                             <div class="card-body p-4">
                                                 <div class="row">
-                                                    {% csrf_token %}
-                                                    <div class="col-12">{{ cart_payment_method_form.payment_methods }}</div>
+                                                    <div class="col">
+                                                        <div>{% bootstrap_form delivery_address_form %}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center">
@@ -155,7 +156,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card rounded-1 shadow-2-strong mb-5 mb-sm-3" id="shoppingBag">
+                            <div class="card rounded-1 shadow mb-5 mb-sm-3" id="orderDetails">
                                 <form action="{{ url_action }}" method="post" class="form">
                                     <h5 class="card-header">{{ order }}</h5>
                                     <div class="card-body p-4">
@@ -195,23 +196,13 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-5 text-center">
+            {% comment %} <div class="mt-5 text-center">
                 <button class="btn btn-secondary btn-dark btn-login" type="submit">
                     Save Order
                 </button>
-            </div>
+            </div> {% endcomment %}
         </div>
     </div>
 {% endblock moderator_content %}
 {% block extra_body %}
-    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <script src="{% static 'admin/js/vendor/xregexp/xregexp.min.js' %}"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <script src="{% static 'admin/js/urlify.js' %}"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <script>
-    slug = $('#id_slug');
-    title = $('#id_category_name');
-    title.keyup(function(){
-        slug.val(URLify(title.val(), 50, true));
-     });
-    </script> {% endcomment %}
 {% endblock extra_body %}
