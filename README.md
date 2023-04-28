@@ -1,6 +1,6 @@
 # Rekvalifikace-django-eshop
 
-Eshop pro malý počet produktů. Vlastnosti:
+Eshop pro malý počet produktů.
 
 Vlastnosti administračního rozhraní:
 - Správa produktů
